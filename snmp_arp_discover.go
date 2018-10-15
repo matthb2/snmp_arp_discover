@@ -65,8 +65,12 @@ func get_os(tgt string, community string) string {
 		Logger: nil,
 	}
 
-	_ = snmphost.Connect()
-	defer snmphost.Conn.Close()
+	err := snmphost.Connect()
+	if err == nil {
+		defer snmphost.Conn.Close()
+	} else {
+		return("unknown")
+	}
 
 	result, _ := snmphost.WalkAll(osoid)
 	for _, r := range result {
@@ -89,8 +93,12 @@ func get_arp_table(tgt string, community string) map[string]int {
 		Logger: nil,
 	}
 
-	_ = snmphost.Connect()
-	defer snmphost.Conn.Close()
+	err := snmphost.Connect()
+	if err == nil {
+		defer snmphost.Conn.Close()
+	} else {
+		return(hosts)
+	}
 
 	result, _ := snmphost.WalkAll(arpoid)
 	for _, r := range result {
